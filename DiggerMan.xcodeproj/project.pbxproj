@@ -1,0 +1,303 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		4B5BB2801A911630009A9A96 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B5BB27F1A911630009A9A96 /* OpenGL.framework */; };
+		55A34E2B1E7CBF2C00B30D8F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A34E1B1E7CBF2C00B30D8F /* main.cpp */; };
+		55A34E2C1E7CBF2C00B30D8F /* GameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A34E1C1E7CBF2C00B30D8F /* GameController.cpp */; };
+		55A34E2D1E7CBF2C00B30D8F /* StudentWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A34E1F1E7CBF2C00B30D8F /* StudentWorld.cpp */; };
+		55A34E2E1E7CBF2C00B30D8F /* Actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A34E211E7CBF2C00B30D8F /* Actor.cpp */; };
+		55A34E2F1E7CBF2C00B30D8F /* GameWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A34E261E7CBF2C00B30D8F /* GameWorld.cpp */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		4B5BB25F1A9110AA009A9A96 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		4B5BB2611A9110AA009A9A96 /* DiggerMan */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DiggerMan; sourceTree = BUILT_PRODUCTS_DIR; };
+		4B5BB27F1A911630009A9A96 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
+		55A34E1B1E7CBF2C00B30D8F /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = DiggerMan/main.cpp; sourceTree = SOURCE_ROOT; };
+		55A34E1C1E7CBF2C00B30D8F /* GameController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameController.cpp; path = DiggerMan/GameController.cpp; sourceTree = SOURCE_ROOT; };
+		55A34E1D1E7CBF2C00B30D8F /* Actor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Actor.h; path = DiggerMan/Actor.h; sourceTree = SOURCE_ROOT; };
+		55A34E1E1E7CBF2C00B30D8F /* GameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameConstants.h; path = DiggerMan/GameConstants.h; sourceTree = SOURCE_ROOT; };
+		55A34E1F1E7CBF2C00B30D8F /* StudentWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StudentWorld.cpp; path = DiggerMan/StudentWorld.cpp; sourceTree = SOURCE_ROOT; };
+		55A34E201E7CBF2C00B30D8F /* StudentWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StudentWorld.h; path = DiggerMan/StudentWorld.h; sourceTree = SOURCE_ROOT; };
+		55A34E211E7CBF2C00B30D8F /* Actor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Actor.cpp; path = DiggerMan/Actor.cpp; sourceTree = SOURCE_ROOT; };
+		55A34E221E7CBF2C00B30D8F /* freeglut_ext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = freeglut_ext.h; path = DiggerMan/freeglut_ext.h; sourceTree = SOURCE_ROOT; };
+		55A34E231E7CBF2C00B30D8F /* freeglut_std.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = freeglut_std.h; path = DiggerMan/freeglut_std.h; sourceTree = SOURCE_ROOT; };
+		55A34E241E7CBF2C00B30D8F /* freeglut.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = freeglut.h; path = DiggerMan/freeglut.h; sourceTree = SOURCE_ROOT; };
+		55A34E251E7CBF2C00B30D8F /* GameController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameController.h; path = DiggerMan/GameController.h; sourceTree = SOURCE_ROOT; };
+		55A34E261E7CBF2C00B30D8F /* GameWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameWorld.cpp; path = DiggerMan/GameWorld.cpp; sourceTree = SOURCE_ROOT; };
+		55A34E271E7CBF2C00B30D8F /* GameWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameWorld.h; path = DiggerMan/GameWorld.h; sourceTree = SOURCE_ROOT; };
+		55A34E281E7CBF2C00B30D8F /* GraphObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GraphObject.h; path = DiggerMan/GraphObject.h; sourceTree = SOURCE_ROOT; };
+		55A34E291E7CBF2C00B30D8F /* SoundFX.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SoundFX.h; path = DiggerMan/SoundFX.h; sourceTree = SOURCE_ROOT; };
+		55A34E2A1E7CBF2C00B30D8F /* SpriteManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SpriteManager.h; path = DiggerMan/SpriteManager.h; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		4B5BB25E1A9110AA009A9A96 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4B5BB2801A911630009A9A96 /* OpenGL.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		4B5BB2581A9110AA009A9A96 = {
+			isa = PBXGroup;
+			children = (
+				4B5BB27F1A911630009A9A96 /* OpenGL.framework */,
+				4B5BB2631A9110AA009A9A96 /* DiggerMan */,
+				4B5BB2621A9110AA009A9A96 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		4B5BB2621A9110AA009A9A96 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				4B5BB2611A9110AA009A9A96 /* DiggerMan */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		4B5BB2631A9110AA009A9A96 /* DiggerMan */ = {
+			isa = PBXGroup;
+			children = (
+				55A34E1B1E7CBF2C00B30D8F /* main.cpp */,
+				55A34E1C1E7CBF2C00B30D8F /* GameController.cpp */,
+				55A34E1D1E7CBF2C00B30D8F /* Actor.h */,
+				55A34E1E1E7CBF2C00B30D8F /* GameConstants.h */,
+				55A34E1F1E7CBF2C00B30D8F /* StudentWorld.cpp */,
+				55A34E201E7CBF2C00B30D8F /* StudentWorld.h */,
+				55A34E211E7CBF2C00B30D8F /* Actor.cpp */,
+				55A34E221E7CBF2C00B30D8F /* freeglut_ext.h */,
+				55A34E231E7CBF2C00B30D8F /* freeglut_std.h */,
+				55A34E241E7CBF2C00B30D8F /* freeglut.h */,
+				55A34E251E7CBF2C00B30D8F /* GameController.h */,
+				55A34E261E7CBF2C00B30D8F /* GameWorld.cpp */,
+				55A34E271E7CBF2C00B30D8F /* GameWorld.h */,
+				55A34E281E7CBF2C00B30D8F /* GraphObject.h */,
+				55A34E291E7CBF2C00B30D8F /* SoundFX.h */,
+				55A34E2A1E7CBF2C00B30D8F /* SpriteManager.h */,
+			);
+			name = DiggerMan;
+			path = FrackMan;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		4B5BB2601A9110AA009A9A96 /* DiggerMan */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 4B5BB2681A9110AA009A9A96 /* Build configuration list for PBXNativeTarget "DiggerMan" */;
+			buildPhases = (
+				4B5BB25D1A9110AA009A9A96 /* Sources */,
+				4B5BB25E1A9110AA009A9A96 /* Frameworks */,
+				4B5BB25F1A9110AA009A9A96 /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = DiggerMan;
+			productName = FrackMan;
+			productReference = 4B5BB2611A9110AA009A9A96 /* DiggerMan */;
+			productType = "com.apple.product-type.tool";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		4B5BB2591A9110AA009A9A96 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "David Smallberg";
+				TargetAttributes = {
+					4B5BB2601A9110AA009A9A96 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
+			};
+			buildConfigurationList = 4B5BB25C1A9110AA009A9A96 /* Build configuration list for PBXProject "DiggerMan" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 4B5BB2581A9110AA009A9A96;
+			productRefGroup = 4B5BB2621A9110AA009A9A96 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				4B5BB2601A9110AA009A9A96 /* DiggerMan */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		4B5BB25D1A9110AA009A9A96 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				55A34E2D1E7CBF2C00B30D8F /* StudentWorld.cpp in Sources */,
+				55A34E2B1E7CBF2C00B30D8F /* main.cpp in Sources */,
+				55A34E2F1E7CBF2C00B30D8F /* GameWorld.cpp in Sources */,
+				55A34E2C1E7CBF2C00B30D8F /* GameController.cpp in Sources */,
+				55A34E2E1E7CBF2C00B30D8F /* Actor.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		4B5BB2661A9110AA009A9A96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = /opt/local/lib;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				"OTHER_LDFLAGS[arch=*]" = "-lglut";
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		4B5BB2671A9110AA009A9A96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = YES;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		4B5BB2691A9110AA009A9A96 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				"LIBRARY_SEARCH_PATHS[arch=*]" = (
+					/opt/X11/lib,
+					/opt/local/lib,
+				);
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				OTHER_CFLAGS = "";
+				PRODUCT_NAME = DiggerMan;
+			};
+			name = Debug;
+		};
+		4B5BB26A1A9110AA009A9A96 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				GCC_TREAT_WARNINGS_AS_ERRORS = NO;
+				GCC_WARN_PEDANTIC = NO;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				PRODUCT_NAME = DiggerMan;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		4B5BB25C1A9110AA009A9A96 /* Build configuration list for PBXProject "DiggerMan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B5BB2661A9110AA009A9A96 /* Debug */,
+				4B5BB2671A9110AA009A9A96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		4B5BB2681A9110AA009A9A96 /* Build configuration list for PBXNativeTarget "DiggerMan" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4B5BB2691A9110AA009A9A96 /* Debug */,
+				4B5BB26A1A9110AA009A9A96 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 4B5BB2591A9110AA009A9A96 /* Project object */;
+}
