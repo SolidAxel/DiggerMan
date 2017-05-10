@@ -22,7 +22,7 @@ GameWorld* createStudentWorld(string assetDir)
  playSound(int soundID);//plays sound effect
  */
 
-int StudentWorld::init()
+int StudentWorld::init()//
 {
     //displays dirt:
     for (int column	 = 0; column < 64; column++)//x is for the columns of dirt
