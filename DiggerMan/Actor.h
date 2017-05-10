@@ -98,6 +98,7 @@ public:
     virtual void moveUp();
     virtual void moveDown();
     int tickWaiting;
+    int waiting;
     virtual ~Protester();
     int ticks = 0;
     int numSquaresToMoveInCurrentDirection(){
@@ -123,6 +124,7 @@ public:
     virtual ~HardcoreProtester();
     int ticks = 0;
     int ticksWaiting;
+    int waiting;
     int numSquaresToMoveInCurrentDirection(){
         int i = rand() % 60;
         while (!(i < 8)){

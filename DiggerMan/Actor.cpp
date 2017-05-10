@@ -18,7 +18,7 @@
  *       ACTOR CLASS                          *
  **********************************************/
 Actor::Actor(StudentWorld* world, int imageID, int startX, int startY, Direction dir, double size, unsigned int depth)
-: GraphObject(imageID, startX, startY, dir, size, depth), m_world(world), m_alive(true)//
+: GraphObject(imageID, startX, startY, dir, size, depth), m_world(world), m_alive(true)
 {
     setVisible(true);
 }
@@ -231,7 +231,7 @@ void DiggerMan::incSonar() {
 /****************************************************
  *       REGULAR-PROTESTER CLASS                    *
  ****************************************************/
-Protester::Protester(StudentWorld* world, int wait) : Character(world, IMID_PROTESTER, 60, 60, left, 1.0, 0, 5) , tickWaiting(wait)
+Protester::Protester(StudentWorld* world, int wait) : Character(world, IMID_PROTESTER, 60, 60, left, 1.0, 0, 5) , tickWaiting(wait), waiting(wait)
 {
     setVisible(true);
     
@@ -243,26 +243,30 @@ void Protester::doSomething(){
     int numSquares = numSquaresToMoveInCurrentDirection();
     if (!isAlive())
         return;
-    while (tickWaiting > 0) {
+    if (tickWaiting > 0) {
         tickWaiting--;
+        return;
     }
-    if (numSquares > 0) {
-        if (getDirection() == left) {
-            moveLeft();
-            numSquares--;
+    else {
+        if (numSquares > 0) {
+            if (getDirection() == left) {
+                moveLeft();
+                numSquares--;
+            }
+            else if (getDirection() == right){
+                moveRight();
+                numSquares--;
+            }
+            else if (getDirection() == down){
+                moveDown();
+                numSquares--;
+            }
+            else if (getDirection() == up){
+                moveUp();
+                numSquares--;
+            }
         }
-        else if (getDirection() == right){
-            moveRight();
-            numSquares--;
-        }
-        else if (getDirection() == down){
-            moveDown();
-            numSquares--;
-        }
-        else if (getDirection() == up){
-            moveUp();
-            numSquares--;
-        }
+        tickWaiting = waiting;
     }
 }
 void Protester::isAnnoyed()
@@ -310,7 +314,7 @@ void Protester::moveDown(){
 /****************************************************
  *       HARDCORE-PROTESTER CLASS                   *
  ****************************************************/
-HardcoreProtester::HardcoreProtester(StudentWorld* world, int wait) : Character(world, IMID_HARD_CORE_PROTESTER, 60, 60, left, 1, 0, 20) , ticksWaiting(wait)
+HardcoreProtester::HardcoreProtester(StudentWorld* world, int wait) : Character(world, IMID_HARD_CORE_PROTESTER, 60, 60, left, 1, 0, 20) , ticksWaiting(wait), waiting(wait)
 {
     setVisible(true);
 }
@@ -321,26 +325,30 @@ void HardcoreProtester::doSomething(){
     int numSquares = numSquaresToMoveInCurrentDirection();
     if (!isAlive())
         return;
-    while (ticksWaiting > 0) {
+    if (ticksWaiting > 0) {
         ticksWaiting--;
+        return;
     }
-    if (numSquares > 0) {
-        if (getDirection() == left) {
-            moveLeft();
-            numSquares--;
+    else{
+        if (numSquares > 0) {
+            if (getDirection() == left) {
+                moveLeft();
+                numSquares--;
+            }
+            else if (getDirection() == right){
+                moveRight();
+                numSquares--;
+            }
+            else if (getDirection() == down){
+                moveDown();
+                numSquares--;
+            }
+            else if (getDirection() == up){
+                moveUp();
+                numSquares--;
+            }
         }
-        else if (getDirection() == right){
-            moveRight();
-            numSquares--;
-        }
-        else if (getDirection() == down){
-            moveDown();
-            numSquares--;
-        }
-        else if (getDirection() == up){
-            moveUp();
-            numSquares--;
-        }
+        ticksWaiting = waiting;
     }
 }
 void HardcoreProtester::moveLeft(){
