@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4B35BE571EC2E6530088E63B /* Actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B35BE531EC2E6530088E63B /* Actor.cpp */; };
+		4B35BE581EC2E6530088E63B /* StudentWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B35BE551EC2E6530088E63B /* StudentWorld.cpp */; };
 		4B5BB2801A911630009A9A96 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4B5BB27F1A911630009A9A96 /* OpenGL.framework */; };
-		4B6262191EC2E58A0030287D /* Actor.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B6262181EC2E58A0030287D /* Actor.cpp */; };
-		4B62621D1EC2E59F0030287D /* StudentWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 4B62621B1EC2E59F0030287D /* StudentWorld.cpp */; };
 		55A34E2B1E7CBF2C00B30D8F /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A34E1B1E7CBF2C00B30D8F /* main.cpp */; };
 		55A34E2C1E7CBF2C00B30D8F /* GameController.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A34E1C1E7CBF2C00B30D8F /* GameController.cpp */; };
 		55A34E2F1E7CBF2C00B30D8F /* GameWorld.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 55A34E261E7CBF2C00B30D8F /* GameWorld.cpp */; };
@@ -28,12 +28,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4B35BE531EC2E6530088E63B /* Actor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Actor.cpp; path = DiggerMan/Actor.cpp; sourceTree = SOURCE_ROOT; };
+		4B35BE541EC2E6530088E63B /* Actor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Actor.h; path = DiggerMan/Actor.h; sourceTree = SOURCE_ROOT; };
+		4B35BE551EC2E6530088E63B /* StudentWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StudentWorld.cpp; path = DiggerMan/StudentWorld.cpp; sourceTree = SOURCE_ROOT; };
+		4B35BE561EC2E6530088E63B /* StudentWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StudentWorld.h; path = DiggerMan/StudentWorld.h; sourceTree = SOURCE_ROOT; };
 		4B5BB2611A9110AA009A9A96 /* DiggerMan */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = DiggerMan; sourceTree = BUILT_PRODUCTS_DIR; };
 		4B5BB27F1A911630009A9A96 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
-		4B6262181EC2E58A0030287D /* Actor.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = Actor.cpp; path = "../../Downloads/DiggerMan-master/DiggerMan/Actor.cpp"; sourceTree = "<group>"; };
-		4B62621A1EC2E59F0030287D /* Actor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Actor.h; path = "../../Downloads/DiggerMan-master/DiggerMan/Actor.h"; sourceTree = "<group>"; };
-		4B62621B1EC2E59F0030287D /* StudentWorld.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = StudentWorld.cpp; path = "../../Downloads/DiggerMan-master/DiggerMan/StudentWorld.cpp"; sourceTree = "<group>"; };
-		4B62621C1EC2E59F0030287D /* StudentWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StudentWorld.h; path = "../../Downloads/DiggerMan-master/DiggerMan/StudentWorld.h"; sourceTree = "<group>"; };
 		55A34E1B1E7CBF2C00B30D8F /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = main.cpp; path = DiggerMan/main.cpp; sourceTree = SOURCE_ROOT; };
 		55A34E1C1E7CBF2C00B30D8F /* GameController.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = GameController.cpp; path = DiggerMan/GameController.cpp; sourceTree = SOURCE_ROOT; };
 		55A34E1E1E7CBF2C00B30D8F /* GameConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameConstants.h; path = DiggerMan/GameConstants.h; sourceTree = SOURCE_ROOT; };
@@ -83,14 +83,14 @@
 				55A34E1B1E7CBF2C00B30D8F /* main.cpp */,
 				55A34E1C1E7CBF2C00B30D8F /* GameController.cpp */,
 				55A34E1E1E7CBF2C00B30D8F /* GameConstants.h */,
-				4B6262181EC2E58A0030287D /* Actor.cpp */,
 				55A34E221E7CBF2C00B30D8F /* freeglut_ext.h */,
-				4B62621A1EC2E59F0030287D /* Actor.h */,
-				4B62621B1EC2E59F0030287D /* StudentWorld.cpp */,
-				4B62621C1EC2E59F0030287D /* StudentWorld.h */,
 				55A34E231E7CBF2C00B30D8F /* freeglut_std.h */,
 				55A34E241E7CBF2C00B30D8F /* freeglut.h */,
 				55A34E251E7CBF2C00B30D8F /* GameController.h */,
+				4B35BE531EC2E6530088E63B /* Actor.cpp */,
+				4B35BE541EC2E6530088E63B /* Actor.h */,
+				4B35BE551EC2E6530088E63B /* StudentWorld.cpp */,
+				4B35BE561EC2E6530088E63B /* StudentWorld.h */,
 				55A34E261E7CBF2C00B30D8F /* GameWorld.cpp */,
 				55A34E271E7CBF2C00B30D8F /* GameWorld.h */,
 				55A34E281E7CBF2C00B30D8F /* GraphObject.h */,
@@ -157,11 +157,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4B62621D1EC2E59F0030287D /* StudentWorld.cpp in Sources */,
 				55A34E2B1E7CBF2C00B30D8F /* main.cpp in Sources */,
+				4B35BE581EC2E6530088E63B /* StudentWorld.cpp in Sources */,
 				55A34E2F1E7CBF2C00B30D8F /* GameWorld.cpp in Sources */,
-				4B6262191EC2E58A0030287D /* Actor.cpp in Sources */,
 				55A34E2C1E7CBF2C00B30D8F /* GameController.cpp in Sources */,
+				4B35BE571EC2E6530088E63B /* Actor.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
