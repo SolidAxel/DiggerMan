@@ -45,8 +45,8 @@ int StudentWorld::init()
     dm = new DiggerMan(this);
     //addActorToGame(dm);
     //hr = new HardcoreProtester(this);
-    pr = new Protester(this);
-    hr = new HardcoreProtester(this);
+    pr = new Protester(this, ticksToWaitBetweenMoves);
+    hr = new HardcoreProtester(this, ticksToWaitBetweenMoves);
     addActorToGame(pr);
     addActorToGame(hr);
     //Boulders
@@ -159,11 +159,7 @@ int StudentWorld::move(){
         return GWSTATUS_PLAYER_DIED;
     }
     if (hr->isAlive()) {
-        int wait = ticksToWaitBetweenMoves;
         hr->ticks = hr->numSquaresToMoveInCurrentDirection();
-        while (wait > 0){
-            wait--;
-        }
         if (hr->ticks > 0) {
             hr->doSomething();
             hr->ticks--;
@@ -174,11 +170,9 @@ int StudentWorld::move(){
         }
     }
     if (pr->isAlive()) {
-        int wait =ticksToWaitBetweenMoves;
+        
         pr->ticks = pr->numSquaresToMoveInCurrentDirection();
-        while (wait > 0){
-            wait--;
-        }
+        
         if (pr->ticks > 0) {
             pr->doSomething();
             pr->ticks--;

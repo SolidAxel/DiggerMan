@@ -231,7 +231,7 @@ void DiggerMan::incSonar() {
 /****************************************************
  *       REGULAR-PROTESTER CLASS                    *
  ****************************************************/
-Protester::Protester(StudentWorld* world) : Character(world, IMID_PROTESTER, 60, 60, left, 1.0, 0, 5)
+Protester::Protester(StudentWorld* world, int wait) : Character(world, IMID_PROTESTER, 60, 60, left, 1.0, 0, 5) , tickWaiting(wait)
 {
     setVisible(true);
     
@@ -243,6 +243,9 @@ void Protester::doSomething(){
     int numSquares = numSquaresToMoveInCurrentDirection();
     if (!isAlive())
         return;
+    while (tickWaiting > 0) {
+        tickWaiting--;
+    }
     if (numSquares > 0) {
         if (getDirection() == left) {
             moveLeft();
@@ -307,7 +310,7 @@ void Protester::moveDown(){
 /****************************************************
  *       HARDCORE-PROTESTER CLASS                   *
  ****************************************************/
-HardcoreProtester::HardcoreProtester(StudentWorld* world) : Character(world, IMID_HARD_CORE_PROTESTER, 60, 60, left, 1, 0, 20)
+HardcoreProtester::HardcoreProtester(StudentWorld* world, int wait) : Character(world, IMID_HARD_CORE_PROTESTER, 60, 60, left, 1, 0, 20) , ticksWaiting(wait)
 {
     setVisible(true);
 }
@@ -318,6 +321,9 @@ void HardcoreProtester::doSomething(){
     int numSquares = numSquaresToMoveInCurrentDirection();
     if (!isAlive())
         return;
+    while (ticksWaiting > 0) {
+        ticksWaiting--;
+    }
     if (numSquares > 0) {
         if (getDirection() == left) {
             moveLeft();

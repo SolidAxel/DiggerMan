@@ -89,7 +89,7 @@ private:
 /////////////////////// CLASS PROTESTER//////////////////
 class Protester : public Character {
 public:
-    Protester(StudentWorld* world);
+    Protester(StudentWorld* world, int wait);
     virtual void doSomething();
     virtual void isAnnoyed();
     virtual void randomizeDir();
@@ -97,7 +97,7 @@ public:
     virtual void moveRight();
     virtual void moveUp();
     virtual void moveDown();
-    
+    int tickWaiting;
     virtual ~Protester();
     int ticks = 0;
     int numSquaresToMoveInCurrentDirection(){
@@ -112,7 +112,7 @@ public:
 
 class HardcoreProtester : public Character {
 public:
-    HardcoreProtester(StudentWorld* world);
+    HardcoreProtester(StudentWorld* world, int wait);
     virtual void doSomething();
     virtual void isAnnoyed();
     virtual void randomizeDir();
@@ -122,6 +122,7 @@ public:
     virtual void moveDown();
     virtual ~HardcoreProtester();
     int ticks = 0;
+    int ticksWaiting;
     int numSquaresToMoveInCurrentDirection(){
         int i = rand() % 60;
         while (!(i < 8)){
