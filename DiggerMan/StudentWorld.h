@@ -12,7 +12,7 @@ using namespace std;
 // Students:  Add code to this file, StudentWorld.cpp, Actor.h, and Actor.cpp
 // contains your StudentWorld class declaration
 
-class StudentWorld : public GameWorld
+class StudentWorld : public GameWorld//
 {
 public:
     StudentWorld(std::string assetDir)

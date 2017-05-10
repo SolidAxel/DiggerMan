@@ -17,7 +17,7 @@
  setDirection(DIRECTION d); // Directions: up, down, left, right
  }
  */
-class StudentWorld;
+class StudentWorld;//
 ///////////////////////////////CLASS ACTOR (BASE CLASS FOR ALL OBJECTS) //////////////////////////////////////
 class Actor : public GraphObject {//Base class for all objects inherits from graphobject
 public:

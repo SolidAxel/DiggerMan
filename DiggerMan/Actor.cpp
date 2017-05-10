@@ -18,7 +18,7 @@
  *       ACTOR CLASS                          *
  **********************************************/
 Actor::Actor(StudentWorld* world, int imageID, int startX, int startY, Direction dir, double size, unsigned int depth)
-: GraphObject(imageID, startX, startY, dir, size, depth), m_world(world), m_alive(true)
+: GraphObject(imageID, startX, startY, dir, size, depth), m_world(world), m_alive(true)//
 {
     setVisible(true);
 }

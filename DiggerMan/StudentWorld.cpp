@@ -25,7 +25,7 @@ GameWorld* createStudentWorld(string assetDir)
 int StudentWorld::init()//
 {
     //displays dirt:
-    for (int column	 = 0; column < 64; column++)//x is for the columns of dirt
+    for (int column = 0; column < 64; column++)//x is for the columns of dirt
     {
         for (int row = 0; row < 64; row++)//y is for the rows of dirt
         {
