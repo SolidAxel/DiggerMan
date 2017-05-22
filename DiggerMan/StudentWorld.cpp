@@ -53,6 +53,8 @@ int StudentWorld::init()//
     int xPosition = 0, yPosition = 0, radius = 6;
     int B = static_cast<int>(fmin(getLevel() / 2 + 2, 7));
     cerr << "Number of Boulders this round = " << B << endl;
+    std::cout << dm -> getDirection() << endl;
+    cerr << left << endl;
     for (int i = 0; i < B; i++)
     {
         xPosition = rand() % 60;
@@ -285,6 +287,29 @@ bool StudentWorld::AreObjectsClose(int x, int y, int radius){
     m_ObjectsClose = false;
     return isClose;
 }
+bool StudentWorld::isActorClose(int x, int y, int radius){
+    bool isClose = false;
+    vector<Actor*>::iterator it = m_v.begin();
+    while (it != m_v.end()){
+        if ((*it)->getID() == IMID_PROTESTER){
+            
+            double distance = EuclidanDistance((*it)->getX(), (*it)->getY(),dm->getX(),dm->getY());
+            if (distance <= radius){
+                if ((*it)->getY() == dm->getY()) {
+                    if ((*it)->getX() > dm->getX() && ((*it) -> getDirection() ==  3)) {
+                        isClose = true;
+                    }
+                    else if ((*it)->getX() < dm->getX() && (*it) -> getDirection() == 4){
+                        isClose = true;
+                    }
+                }
+            }
+        
+        }
+        it++;
+    }
+    return isClose;
+}
 int StudentWorld::annoyAllNearbyActs(Actor* Act, int x, int y, int radius)
 {
     int count = 0;
@@ -314,7 +339,7 @@ int StudentWorld::annoyAllNearbyActs(Actor* Act, int x, int y, int radius)
 }
 void StudentWorld::removeDirt(int x, int y)
 {
-    for (int c = x; c< x + 4; c++)
+    for (int c = x; c < x + 4; c++)
     {
         for (int r = y; r < y + 4; r++)
         {

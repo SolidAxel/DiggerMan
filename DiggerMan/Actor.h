@@ -98,9 +98,12 @@ public:
     virtual void moveUp();
     virtual void moveDown();
     int tickWaiting;
+    virtual void shout();
     int waiting;
     virtual ~Protester();
     int ticks = 0;
+    int ticksSinceLastShout = 0;
+    bool isFacingDiggerman();
     int numSquaresToMoveInCurrentDirection(){
         int i = rand() % 60;
         while (!(i < 8)){

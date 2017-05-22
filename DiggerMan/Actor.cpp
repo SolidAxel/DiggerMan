@@ -245,9 +245,14 @@ void Protester::doSomething(){
         return;
     if (tickWaiting > 0) {
         tickWaiting--;
+        ticksSinceLastShout++;
         return;
     }
     else {
+        if (ticksSinceLastShout > 15) {
+            shout();
+            ticksSinceLastShout = 0;
+        }
         if (numSquares > 0) {
             if (getDirection() == left) {
                 moveLeft();
@@ -275,6 +280,12 @@ void Protester::isAnnoyed()
     if (getHealth() <= 0){
         isDead();
         getWorld()->playSound(SOUND_PROTESTER_ANNOYED);
+    }
+}
+void Protester::shout(){
+    if (getWorld()-> isActorClose(getX(), getY(), 16)) {
+        getWorld()->playSound(SOUND_PROTESTER_YELL);
+        
     }
 }
 void Protester::randomizeDir()
