@@ -29,7 +29,9 @@ public:
     double EuclidanDistance(int x1, int y1, int x2, int y2);
     void addActorToGame(Actor * Act);
     bool AreObjectsClose(int x, int y, int radius);
-    bool isActorClose(int x, int y, int radius);
+    bool isActorCloseAndFacing(int x, int y, int radius); //new
+    bool isActorClose(int x, int y, int radius, int &dir); //new
+//    bool isActorCloseForHardcore(int x, int y, int radius, int &dir1); //new
     int annoyAllNearbyActs(Actor* Act, int x, int y, int radius);
     void removeDirt(int x, int y);
     bool isThereDirtGrid(int x, int y);
@@ -40,6 +42,8 @@ public:
     void addScore(int score);
     void addInvetory(int ID);
     bool IsItCloseToDiggerMan(int x, int y, int radius);
+    void randPositions(int numLvl, int ID);
+    void Sonar(bool state, int x, int y, int radius);//state true is activation; state false is deactivation -------------------NEW
 private:
     void DisplayText();
     bool m_ObjectsClose;

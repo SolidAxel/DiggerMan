@@ -113,6 +113,13 @@ void DiggerMan::doSomething()
 void DiggerMan::keyInput() {
     int i;
     Direction d = getDirection();
+    if (isSonarOn)//NEW
+        sonarLifeTimeTicks--;//NEW
+    if (sonarLifeTimeTicks == 0 && isSonarOn)//NEW
+    {
+        isSonarOn = false;
+        getWorld()->Sonar(isSonarOn, getX(), getY(), sonarRadius);
+    }
     if (getWorld()->getKey(i))
     {
         switch (i)
@@ -171,9 +178,11 @@ void DiggerMan::keyInput() {
             case 'Z':			//use sonar kit
                 if (m_sonar > 0)
                 {
-                    
-                    
-                    getWorld()->playSound(SOUND_SONAR);
+                    isSonarOn = true;//NEW
+                    sonarLifeTimeTicks = 30;//NEW
+                    decSonar();//NEW
+                    getWorld()->playSound(SOUND_SONAR);//NEW
+                    getWorld()->Sonar(isSonarOn, getX(), getY(), sonarRadius);//NEW
                 }
                 break;
             case KEY_PRESS_TAB:		//bribe with gold
@@ -241,6 +250,7 @@ Protester::~Protester(){
 }
 void Protester::doSomething(){
     int numSquares = numSquaresToMoveInCurrentDirection();
+    int dir = 0;
     if (!isAlive())
         return;
     if (tickWaiting > 0) {
@@ -252,8 +262,13 @@ void Protester::doSomething(){
         if (ticksSinceLastShout > 15) {
             shout();
             ticksSinceLastShout = 0;
+            return;
         }
-        if (numSquares > 0) {
+        if (getWorld()->isActorClose(getX(), getY(), 16, dir)){ //new
+            std::cout << getWorld()-> isActorClose(getX(), getY(), 16, dir) << std::endl;
+            stepTowardsDiggerMan(dir);
+        }
+        else if (numSquares > 0) {
             if (getDirection() == left) {
                 moveLeft();
                 numSquares--;
@@ -282,11 +297,29 @@ void Protester::isAnnoyed()
         getWorld()->playSound(SOUND_PROTESTER_ANNOYED);
     }
 }
-void Protester::shout(){
-    if (getWorld()-> isActorClose(getX(), getY(), 16)) {
+void Protester::shout(){    //new
+    if (getWorld()-> isActorCloseAndFacing(getX(), getY(), 16)) {
         getWorld()->playSound(SOUND_PROTESTER_YELL);
-        
+    
     }
+}
+void Protester::stepTowardsDiggerMan(int &dir){ //new
+        if (dir == 1) {
+            setDirection(left);
+            moveLeft();
+        }
+        else if (dir == 2){
+            setDirection(right);
+            moveRight();
+        }
+        else if (dir == 3){
+            setDirection(down);
+            moveDown();
+        }
+        else if (dir == 4){
+            setDirection(up);
+            moveUp();
+        }
 }
 void Protester::randomizeDir()
 {
@@ -325,7 +358,7 @@ void Protester::moveDown(){
 /****************************************************
  *       HARDCORE-PROTESTER CLASS                   *
  ****************************************************/
-HardcoreProtester::HardcoreProtester(StudentWorld* world, int wait) : Character(world, IMID_HARD_CORE_PROTESTER, 60, 60, left, 1, 0, 20) , ticksWaiting(wait), waiting(wait)
+HardcoreProtester::HardcoreProtester(StudentWorld* world, int wait) : Character(world, IMID_HARD_CORE_PROTESTER, 60, 60, left, 1.0, 0, 5), tickWaiting(wait), waiting(wait)
 {
     setVisible(true);
 }
@@ -334,14 +367,25 @@ HardcoreProtester::~HardcoreProtester(){
 }
 void HardcoreProtester::doSomething(){
     int numSquares = numSquaresToMoveInCurrentDirection();
+    int dir1 = 0;
     if (!isAlive())
         return;
-    if (ticksWaiting > 0) {
-        ticksWaiting--;
+    if (tickWaiting > 0) {
+        tickWaiting--;
+        ticksSinceLastShout++;
         return;
     }
-    else{
-        if (numSquares > 0) {
+    else {
+        if (ticksSinceLastShout > 15) {
+            shoutHardcore();
+            ticksSinceLastShout = 0;
+            return;
+        }
+        if (getWorld()->isActorClose(getX(), getY(), 16, dir1)){ //new
+            std::cout << "Hardcore : "<< getWorld()-> isActorClose(getX(), getY(), 16, dir1) << std::endl;
+            stepTowardsDiggerManHardcore(dir1);
+        }
+        else if (numSquares > 0) {
             if (getDirection() == left) {
                 moveLeft();
                 numSquares--;
@@ -359,7 +403,7 @@ void HardcoreProtester::doSomething(){
                 numSquares--;
             }
         }
-        ticksWaiting = waiting;
+        tickWaiting = waiting;
     }
 }
 void HardcoreProtester::moveLeft(){
@@ -380,6 +424,30 @@ void HardcoreProtester::isAnnoyed()
     if (getHealth() <= 0){
         isDead();
         getWorld()->playSound(SOUND_PROTESTER_ANNOYED);
+    }
+}
+void HardcoreProtester::stepTowardsDiggerManHardcore(int &dir1){ //new
+    if (dir1 == 1) {
+        setDirection(left);
+        moveLeft();
+    }
+    else if (dir1 == 2){
+        setDirection(right);
+        moveRight();
+    }
+    else if (dir1 == 3){
+        setDirection(down);
+        moveDown();
+    }
+    else if (dir1 == 4){
+        setDirection(up);
+        moveUp();
+    }
+}
+void HardcoreProtester::shoutHardcore(){    //new
+    if (getWorld()-> isActorCloseAndFacing(getX(), getY(), 16)) {
+        getWorld()->playSound(SOUND_PROTESTER_YELL);
+        
     }
 }
 void HardcoreProtester::randomizeDir()
@@ -441,8 +509,6 @@ void Items::doSomething()
 {
     
 }
-
-
 
 /*****************************************************
  *       GoldNuggets CLASS                           *
@@ -509,10 +575,6 @@ void GoldNuggets::doSomething()
                 isDead();
             }
         }
-        
-        
-        
-        
     }
     
     
@@ -596,7 +658,41 @@ void Squirt::doSomething() {
  *                                                    *
  *****************************************************/
 OilBarrels::OilBarrels(StudentWorld * world, int startX, int startY)
-:Items(world, IMID_BARREL, startX, startY, right, .25, 3) {}
+:Items(world, IMID_BARREL, startX, startY, right, 1.0, 2)//NEW
+{
+    setVisible(false);
+}
+void OilBarrels::doSomething()
+{
+    if (isAlive())
+    {
+        
+        //checks to see if diggerman is close
+        //if he is within radius of 4 then setvisiable
+        //if (getWorld()->AreObjectsClose(getX(), getY(), 4) && pickedUp == false)
+        
+        if (getWorld()->IsItCloseToDiggerMan(getX(), getY(), 4) && pickedUp == false)
+        {
+            setVisible(true);
+            cerr << "Colision\n";
+            //cerr << "position (x,y): \n " << "( " << getX() << ',' << getY() << " )" << endl;
+        }
+        //if diggerman is within radius of 3
+        //update score and add gold to inventory
+        if (getWorld()->IsItCloseToDiggerMan(getX(), getY(), 3) && pickedUp == false)
+        {
+            cerr << "picked up\n";
+            //cerr << "position (x,y): \n " << "( " << getX() << ',' << getY() << " )" << endl;
+            setPickedUp(true);
+            getWorld()->playSound(SOUND_FOUND_OIL);
+            getWorld()->addScore(score);
+            //getWorld()->addInvetory(getID());
+            isDead();
+        }
+    }
+    else //if dead
+        return;
+}
 unsigned int OilBarrels::getStartOilCount()
 {
     return getItemCount();
@@ -605,14 +701,46 @@ OilBarrels::~OilBarrels()
 {
     setVisible(false);
 }
+void OilBarrels::setPickedUp(bool flag)
+{
+    pickedUp = flag;
+}
 
 
 /******************************************************
  *       SonarCharge CLASS                            *
  *                                                    *
  *****************************************************/
-SonarCharge::SonarCharge(StudentWorld * world, int startX, int startY)
-:Items(world, IMID_SONAR, startX, startY, right, .25, 1) {}
+SonarCharge::SonarCharge(StudentWorld * world)//new
+:Items(world, IMID_SONAR, 0, 60, right, 1, 1)//new
+{
+    setVisible(true);//new
+    ticksinTempState = static_cast<int>(fmax(100, 300 - 10 * world->getLevel()));//new
+}
+void SonarCharge::doSomething()//new
+{
+    if (isAlive())
+    {
+        if (getWorld()->IsItCloseToDiggerMan(getX(), getY(), 3))//if its near the diggerman by 3 units in any direction(raidally)
+        {
+            isDead();//kill it bro because it already got caught by DM
+            getWorld()->playSound(SOUND_GOT_GOODIE);//play sound for picking up the goodies ;)P
+            getWorld()->increaseScore(score);//increase this guys score cuz he just poicked up a sonar ma boi
+            getWorld()->addInvetory(getID());//send the id back to the function so it can know what it is so it can know what to add for the DM
+        }
+        else//if not then continue to the countdown of the ticks
+        {
+            if (ticksinTempState > 0)//checks if it ran out of ticks already
+            {
+                ticksinTempState--;//decrements it by 1 if it hasnt ran out yet
+            }
+            else//if its reahced zero then kill it bro
+                isDead();//bam dead!
+        }
+    }
+    else
+        return;
+}
 SonarCharge::~SonarCharge()
 {
     setVisible(false);

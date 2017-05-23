@@ -74,6 +74,9 @@ private:
     unsigned int m_squirt;
     unsigned int m_goldNug;
     unsigned int m_sonar;
+    bool isSonarOn = false;//NEW
+    int sonarLifeTimeTicks;//NEW
+    int sonarRadius = 64;//NEW
     
 };
 ////////////////////////////////CLASS DIRT/////////////////////////////////////////////
@@ -87,7 +90,8 @@ private:
 };
 
 /////////////////////// CLASS PROTESTER//////////////////
-class Protester : public Character {
+class Protester : public Character
+{
 public:
     Protester(StudentWorld* world, int wait);
     virtual void doSomething();
@@ -97,6 +101,7 @@ public:
     virtual void moveRight();
     virtual void moveUp();
     virtual void moveDown();
+    virtual void stepTowardsDiggerMan(int &dir);  //new
     int tickWaiting;
     virtual void shout();
     int waiting;
@@ -124,9 +129,12 @@ public:
     virtual void moveRight();
     virtual void moveUp();
     virtual void moveDown();
+    void stepTowardsDiggerManHardcore(int &dir1);
+    void shoutHardcore();
     virtual ~HardcoreProtester();
     int ticks = 0;
-    int ticksWaiting;
+    int tickWaiting;
+    int ticksSinceLastShout = 0;
     int waiting;
     int numSquaresToMoveInCurrentDirection(){
         int i = rand() % 60;
@@ -200,19 +208,27 @@ class OilBarrels : public Items// OilBarrels Class Derived from Items
 {
 private:
     const int score = 1000;//For collecting a barrel of oil
+    bool pickedUp = false;
+    int State; // 1 for permanent state 2 for temp state
+    bool m_waiting;
+    int ticks = 0;
 public:
     OilBarrels(StudentWorld* world, int startX, int startY);
+    void setPickedUp(bool flag);
     unsigned int getStartOilCount();
+    virtual void doSomething();
     virtual ~OilBarrels();
 };
-
 //////////////////////////////////////SonarCharge///////////////////////////////////////
 class SonarCharge : public Items//SonarCharge Class Derived from Items
 {
 private:
+    bool pickedUp = false;//new
+    int ticksinTempState;//new
     const int score = 75;//For picking up Sonar Charge
 public:
-    SonarCharge(StudentWorld* world, int startX, int startY);
+    SonarCharge(StudentWorld* world);//new
+    virtual void doSomething();//new
     virtual ~SonarCharge();
 };
 /////////////////////////////////////WaterPool//////////////////////////////////////////

@@ -191,7 +191,7 @@ int StudentWorld::move(){
     if (randomnumber % G == 1)
     {
         if (rand() % 100 == 20)//20 percent of the time or 1/5
-            addActorToGame(new SonarCharge(this, 0, 60));//according to specs sonar can only appear at x=0,y=60
+            addActorToGame(new SonarCharge(this));//according to specs sonar can only appear at x=0,y=60
         else{//waterpool can appear anywhere in the grid where dirt is removed
             xPosition = rand() % 61;
             yPosition = rand() % 61;
@@ -248,6 +248,93 @@ void StudentWorld::addActorToGame(Actor *Act)
 {
     m_v.push_back(Act);
 }
+void StudentWorld::randPositions(int numLvl, int ID)
+{
+    int x = 0, y = 0, radius = 6;
+    for (int i = 0; i < numLvl; i++)
+    {
+        x = rand() % 60;
+        y = rand() % 56;
+        //while position is in the mineshaft coordinates, or at the bottom, out bounds of Dirt "map" set a new postion
+        //Boulders have to be higher than y = 20
+        if (ID == IMID_BOULDER)
+        {
+            while ((x >26 && x < 34) || y < 20 || y > 56)
+            {
+                x = rand() % 60;
+                y = rand() % 56;
+                if (AreObjectsClose(x, y, radius)){
+                    x = rand() % 60;
+                    y = rand() % 56;
+                }
+            }
+        }
+        else
+            while ((x >26 && x < 34) || y < 0 || y > 56)
+            {
+                x = rand() % 60;
+                y = rand() % 56;
+            }
+        
+        
+        ////check that there's no other items within a radius of 6
+        if (AreObjectsClose(x, y, radius) && m_ObjectsClose == true){
+            
+            x = rand() % 60;
+            y = rand() % 56;
+            if (ID == IMID_BOULDER)
+            {
+                while ((x>26 && x < 34) || y < 20 || y>56)
+                {
+                    x = rand() % 60;
+                    y = rand() % 56;
+                    if (AreObjectsClose(x, y, radius)){
+                        x = rand() % 60;
+                        y = rand() % 56;
+                    }
+                }
+            }
+            else
+                while ((x >26 && x < 34) || y < 0 || y > 56)
+                {
+                    x = rand() % 60;
+                    y = rand() % 56;
+                }
+            
+        }
+        if (ID == IMID_BOULDER)
+        {
+            addActorToGame(new Boulders(this, x, y));
+            removeDirt(x, y);
+        }
+        //if ID is gold then increase gold count
+        else if (ID == IMID_GOLD)
+        {
+            addActorToGame(new GoldNuggets(this, x, y, 1));
+            //removeDirt(x, y);
+        }
+        //if ID is water pool then icrease the number of squirts by 5
+        else if (ID == IMID_BARREL)
+        {
+            addActorToGame(new OilBarrels(this, x, y));
+        }
+        //addActorToGame(new Boulders(this, x, y));
+        //removeDirt(x, y);
+    }
+}
+
+void StudentWorld::Sonar(bool state, int x, int y, int radius)//new
+{
+    vector<Actor*>::iterator it = m_v.begin();
+    while (it != m_v.end())
+    {
+        if (EuclidanDistance(x, y, (*it)->getX(), (*it)->getY()) <= radius)
+            if ((*it)->getID() == IMID_GOLD || (*it)->getID() == IMID_BARREL)
+                (*it)->setVisible(state);
+        it++;
+    }
+    
+}
 
 //checks if object is close to diggerman position
 //Can't use AreObjectsClose because diggerman is not in the vector of actors
@@ -287,11 +374,11 @@ bool StudentWorld::AreObjectsClose(int x, int y, int radius){
     m_ObjectsClose = false;
     return isClose;
 }
-bool StudentWorld::isActorClose(int x, int y, int radius){
+bool StudentWorld::isActorCloseAndFacing(int x, int y, int radius){//new
     bool isClose = false;
     vector<Actor*>::iterator it = m_v.begin();
     while (it != m_v.end()){
-        if ((*it)->getID() == IMID_PROTESTER){
+        if ((*it)->getID() == IMID_PROTESTER || (*it)->getID() == IMID_HARD_CORE_PROTESTER){
             
             double distance = EuclidanDistance((*it)->getX(), (*it)->getY(),dm->getX(),dm->getY());
             if (distance <= radius){
@@ -303,6 +390,14 @@ bool StudentWorld::isActorClose(int x, int y, int radius){
                         isClose = true;
                     }
                 }
+                else if((*it)->getX() == dm->getX()){
+                    if ((*it)->getY() > dm->getY() && ((*it) -> getDirection() ==  1)) {
+                        isClose = true;
+                    }
+                    else if ((*it)->getY() < dm->getY() && (*it) -> getDirection() == 2){
+                        isClose = true;
+                    }
+                }
             }
         
         }
@@ -310,6 +405,76 @@ bool StudentWorld::isActorClose(int x, int y, int radius){
     }
     return isClose;
 }
+bool StudentWorld::isActorClose(int x, int y, int radius, int &dir){//new
+    bool isClose = false;
+    vector<Actor*>::iterator it = m_v.begin();
+    while (it != m_v.end()){
+        if ((*it)->getID() == IMID_PROTESTER || (*it)->getID() == IMID_HARD_CORE_PROTESTER){
+            
+            double distance = EuclidanDistance((*it)->getX(), (*it)->getY(),dm->getX(),dm->getY());
+            if (distance <= radius){
+                if ((*it)->getY() == dm->getY()) {
+                    if ((*it)->getX() > dm->getX()) {
+                        dir = 1;
+                        isClose = true;
+                    }
+                    else if ((*it)->getX() < dm->getX()){
+                        dir = 2;
+                        isClose = true;
+                    }
+                }
+                else if((*it)->getX() == dm->getX()){
+                    if ((*it)->getY() > dm->getY()) {
+                        dir = 3;
+                        isClose = true;
+                    }
+                    else if ((*it)->getY() < dm->getY()){
+                        dir = 4;
+                        isClose = true;
+                    }
+                }
+            }
+            
+        }
+        it++;
+    }
+    return isClose;
+}
+//bool StudentWorld::isActorCloseForHardcore(int x, int y, int radius, int &dir1){
+//    bool isClose = false;
+//    vector<Actor*>::iterator it = m_v.begin();
+//    while (it != m_v.end()){
+//        if ((*it)->getID() == IMID_HARD_CORE_PROTESTER){
+//            
+//            double distance = EuclidanDistance((*it)->getX(), (*it)->getY(),dm->getX(),dm->getY());
+//            if (distance <= radius){
+//                if ((*it)->getY() == dm->getY()) {
+//                    if ((*it)->getX() > dm->getX()) {
+//                        dir1 = 1;
+//                        isClose = true;
+//                    }
+//                    else if ((*it)->getX() < dm->getX()){
+//                        dir1 = 2;
+//                        isClose = true;
+//                    }
+//                }
+//                else if((*it)->getX() == dm->getX()){
+//                    if ((*it)->getY() > dm->getY()) {
+//                        dir1 = 3;
+//                        isClose = true;
+//                    }
+//                    else if ((*it)->getY() < dm->getY()){
+//                        dir1 = 4;
+//                        isClose = true;
+//                    }
+//                }
+//            }
+//            
+//        }
+//        it++;
+//    }
+//    return isClose;
+//}
 int StudentWorld::annoyAllNearbyActs(Actor* Act, int x, int y, int radius)
 {
     int count = 0;
@@ -478,12 +643,12 @@ void StudentWorld::addScore(int score)
 }
 void StudentWorld::addInvetory(int ID)
 {
-    if (ID == 5)
+    if (ID == IMID_BARREL)
     {
         //if ID is barrel do something
     }
     //if ID is gold then increase gold count
-    if (ID == 7)
+    if (ID == IMID_GOLD)
     {
         dm->incGoldNug();
     }
@@ -491,6 +656,10 @@ void StudentWorld::addInvetory(int ID)
     if (ID == IMID_WATER_POOL)
     {
         dm->incSquirts(5);
+    }
+    if (ID == IMID_SONAR)//new
+    {
+        dm->incSonar();
     }
     //etc...
 }
