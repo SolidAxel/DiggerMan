@@ -256,7 +256,10 @@ void DiggerMan::decOil() {
 /****************************************************
 *       REGULAR-PROTESTER CLASS                    *
 ****************************************************/
+<<<<<<< HEAD
 
+=======
+>>>>>>> amauri
 Protester::~Protester() {
 	setVisible(false);
 }
@@ -274,6 +277,7 @@ bool Protester::isItInRestState()
 void Protester::setTicksToWaitBewtweenMoves()
 {
 	ticksToWaitBetweenMoves = static_cast<int>(fmax(0, 3 - getWorld()->getLevel()));
+<<<<<<< HEAD
 }
 
 int Protester::getHealth()const {
@@ -483,6 +487,195 @@ bool Protester::moveDown()
 
 
 
+=======
+}
+
+void Protester::doSomething()
+{
+	if (!isAlive())
+		return;
+	else if (isItInRestState())
+	{
+		ticksToWaitBetweenMoves--;
+		return;
+	}
+	else if (leaveOilField)
+	{
+		return;
+	}
+	else if (getWorld()->IsItCloseToDiggerMan(getX(), getY(), 4))//checks to see if protester is within the radius of diggerman by 4 units
+	{
+		if (getWorld()->isProtestorFacingDiggerMan(getX(), getY(), getDirection()))
+			if (nonRestingTicks % 15 == 0)
+			{
+				getWorld()->playSound(SOUND_PROTESTER_YELL);
+				getWorld()->annoyDiggerMan();
+				return;
+			}
+	}
+	else if (getWorld()->isProtestorInHorizontalLineOfSight(getX()) || getWorld()->isProtestorInVerticalLineOfSight(getY()))
+	{
+		if (!getWorld()->IsItCloseToDiggerMan(getX(), getY(), 4))
+			if (getWorld()->canProtestorReachDiggerMan(getX(), getY()))
+			{
+				setDirection(getWorld()->setDirectionOfProtetorForChase(getX(), getY()));
+				if (getDirection() == left)
+				{
+					moveLeft();
+					numSquares = 0;
+					return;
+				}
+				else if (getDirection() == right)
+				{
+					moveRight();
+					numSquares = 0;
+					return;
+				}
+				else if (getDirection() == down)
+				{
+					moveDown();
+					numSquares = 0;
+					return;
+				}
+				else if (getDirection() == up)
+				{
+					moveUp();
+					numSquares = 0;
+					return;
+				}
+			}
+	}
+	else
+	{
+		if (numSquares > 0)
+		{
+			if (getDirection() == left)
+			{
+				if (!moveLeft())
+					numSquares = 0;
+				else
+					numSquares--;
+			}
+			else if (getDirection() == right)
+			{
+				if (!moveRight())
+					numSquares = 0;
+				else
+					numSquares--;
+			}
+			else if (getDirection() == down)
+			{
+				if (!moveDown())
+					numSquares = 0;
+				else
+					numSquares--;
+			}
+			else if (getDirection() == up)
+			{
+				if (!moveUp())
+					numSquares = 0;
+				else
+					numSquares--;
+			}
+		}
+		else
+		{
+			setDirection(getWorld()->setDirectionOfProtetorForRegularWalking(getX(), getY()));
+			setNumSquaresToMoveInCurrentDirection();
+			if (getWorld()->protestorIsAtIntersection(getX(), getY(), getDirection()))
+			{
+				if (nonRestingTicks % 200 == 0)
+				{
+					setDirection(getWorld()->setDirectionAtIntersection(getX(), getY(), getDirection()));
+					setNumSquaresToMoveInCurrentDirection();
+				}
+			}
+			if (getDirection() == left)
+			{
+				if (!moveLeft())
+					numSquares = 0;
+				else
+					numSquares--;
+			}
+			else if (getDirection() == right)
+			{
+				if (!moveRight())
+					numSquares = 0;
+				else
+					numSquares--;
+			}
+			else if (getDirection() == down)
+			{
+				if (!moveDown())
+					numSquares = 0;
+				else
+					numSquares--;
+			}
+			else if (getDirection() == up)
+			{
+				if (!moveUp())
+					numSquares = 0;
+				else
+					numSquares--;
+			}
+		}
+	}
+
+}
+void Protester::isAnnoyed()
+{
+	if (getHealth() <= 0)
+	{
+		leaveOilField = true;
+		isDead();
+		getWorld()->playSound(SOUND_PROTESTER_GIVE_UP);
+	}
+	else
+	{
+		getWorld()->playSound(SOUND_PROTESTER_ANNOYED);
+		decHealth();
+		decHealth();
+		ticksToWaitBetweenMoves += static_cast<int>(fmax(50, 100 - getWorld()->getLevel() * 10));
+	}
+}
+bool Protester::moveLeft()
+{
+	if (getWorld()->canActMoveTo(this, getX() - 1, getY()))
+	{
+		moveTo(getX() - 1, getY());
+		return true;
+	}
+	return false;
+}
+bool Protester::moveRight()
+{
+	if (getWorld()->canActMoveTo(this, getX() + 1, getY()))
+	{
+		moveTo(getX() + 1, getY());
+		return true;
+	}
+	return false;
+}
+bool Protester::moveUp()
+{
+	if (getWorld()->canActMoveTo(this, getX(), getY() + 1))
+	{
+		moveTo(getX(), getY() + 1);
+		return true;
+	}
+	return false;
+}
+bool Protester::moveDown()
+{
+	if (getWorld()->canActMoveTo(this, getX(), getY() - 1))
+	{
+		moveTo(getX(), getY() - 1);
+		return true;
+	}
+	return false;
+}
+
+>>>>>>> amauri
 /*****************************************************
 *       DIRT CLASS                                   *
 * -This class makes up the "background" for the game *
