@@ -51,8 +51,8 @@ public:
 	virtual void doSomething();
 	virtual void isAnnoyed();
 	virtual void hitByBoulder();
-private:
-	unsigned int m_health;
+     unsigned int m_health;
+	
 };
 
 ////////////////////////////////CLASS DIGGERMAN (INHERITS FROM CHARACTERS CLASS)////////////////////
@@ -98,20 +98,26 @@ public:
 };
 
 /////////////////////// CLASS PROTESTER//////////////////
-class Protester : public Character {
+class Protester : public Actor {
 public:
-	Protester(StudentWorld* world);
+    Protester(StudentWorld* world, int imageID, int health) : Actor(world, imageID,60, 60, left, 1.0, 0, 0), m_health(health),leaveState(false)
+    {
+        setVisible(true);
+    };
 	int numSquares = 0;
 	int ticksToWaitBetweenMoves;
 	bool leaveOilField = false;
-	int nonRestingTicks = 0;
 	virtual void doSomething();
 	virtual void isAnnoyed();
 	virtual bool moveLeft();
 	virtual bool moveRight();
 	virtual bool moveUp();
 	virtual bool moveDown();
-
+    int nonRestingTicks = 0;
+    virtual int getHealth()const;
+    virtual void setHealth(int health);
+    virtual void changeHealth(int health);
+    virtual void decHealth();
 	void setNumSquaresToMoveInCurrentDirection()
 	{
 		numSquares = rand() % 60;
@@ -122,28 +128,27 @@ public:
 	bool isItInRestState();
 	void setTicksToWaitBewtweenMoves();
 	virtual ~Protester();
+private:
+   int m_health;
+    bool leaveState;
+    
 };
 ///////////////////CLASS HARCORE PORTESTER/////////////////////////
-class HardcoreProtester : public Character {
+class RegularProtester: public Protester{
 public:
-	HardcoreProtester(StudentWorld* world);
-	int ticksToWaitBetweenMoves;
-	int numSquares = 0;
-	int nonRestingTicks = 0;
-	bool leaveOilField = false;
-	virtual void isAnnoyed();
-	virtual void doSomething();
-	virtual bool moveLeft();
-	virtual bool moveRight();
-	virtual bool moveUp();
-	virtual bool moveDown();
-	void setNumSquaresToMoveInCurrentDirection()
-	{
-		numSquares = rand() % 60 + 8;
-	}
-	virtual void setTicksToWaitBewtweenMoves();
-	bool isItInRestState();
-	virtual ~HardcoreProtester();
+    RegularProtester(StudentWorld * world) : Protester(world,IMID_PROTESTER,5){}
+    ~RegularProtester()
+    {
+        setVisible(false);
+    }
+};
+class HardcoreProtester: public Protester{
+public:
+    HardcoreProtester(StudentWorld * world) : Protester(world,IMID_HARD_CORE_PROTESTER,20){}
+    ~HardcoreProtester()
+    {
+        setVisible(false);
+    }
 };
 ////////////////////////////// CLASS ITEMS (INHERITS FROM BASE CLASS (ACTORS) AND IS THE BASE FOR ALL NON-MOVING CHARACTERS IN GAME, i.e DIRT, BOULDER/////////////////////////
 class Items : public Actor {

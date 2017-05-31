@@ -256,11 +256,7 @@ void DiggerMan::decOil() {
 /****************************************************
 *       REGULAR-PROTESTER CLASS                    *
 ****************************************************/
-Protester::Protester(StudentWorld* world) : Character(world, IMID_PROTESTER, 60, 60, left, 1.0, 0, 5, 0)
-{
-	setVisible(true);
-	setTicksToWaitBewtweenMoves();
-}
+
 Protester::~Protester() {
 	setVisible(false);
 }
@@ -278,6 +274,20 @@ bool Protester::isItInRestState()
 void Protester::setTicksToWaitBewtweenMoves()
 {
 	ticksToWaitBetweenMoves = static_cast<int>(fmax(0, 3 - getWorld()->getLevel()));
+}
+
+int Protester::getHealth()const {
+    return m_health;
+}
+void Protester::setHealth(int health) {
+    m_health = health;
+}
+void Protester::changeHealth(int health) {
+    m_health -= health;
+}
+void Protester::decHealth()
+{
+    m_health--;
 }
 
 void Protester::doSomething()
@@ -470,207 +480,9 @@ bool Protester::moveDown()
 /****************************************************
 *       HARDCORE-PROTESTER CLASS                   *
 ****************************************************/
-HardcoreProtester::HardcoreProtester(StudentWorld* world) : Character(world, IMID_HARD_CORE_PROTESTER, 60, 60, left, 1, 0, 20, 0)
-{
-	setVisible(true);
-	setTicksToWaitBewtweenMoves();
-}
-void HardcoreProtester::setTicksToWaitBewtweenMoves()
-{
-	ticksToWaitBetweenMoves = static_cast<int>(fmax(0, 3 - getWorld()->getLevel()));
-}
-bool HardcoreProtester::isItInRestState()
-{
-	if (ticksToWaitBetweenMoves > 0)
-		return true;
-	setTicksToWaitBewtweenMoves();
-	nonRestingTicks++;
-	return false;
-}
-HardcoreProtester::~HardcoreProtester()
-{
-	setVisible(false);
-}
-void HardcoreProtester::isAnnoyed()
-{
-	changeHealth(2);
-	if (getHealth() <= 0) {
-		isDead();
-		getWorld()->playSound(SOUND_PROTESTER_ANNOYED);
-	}
-}
-void HardcoreProtester::doSomething()
-{
-	if (!isAlive())
-		return;
-	else if (isItInRestState())
-	{
-		ticksToWaitBetweenMoves--;
-		return;
-	}
-	else if (leaveOilField)
-	{
-		return;
-	}
-	else if (getWorld()->IsItCloseToDiggerMan(getX(), getY(), 4))//checks to see if protester is within the radius of diggerman by 4 units
-	{
-		if (getWorld()->isProtestorFacingDiggerMan(getX(), getY(), getDirection()))
-			if (nonRestingTicks % 15 == 0)
-			{
-				getWorld()->playSound(SOUND_PROTESTER_YELL);
-				getWorld()->annoyDiggerMan();
-				return;
-			}
-	}
-	//else if (!getWorld()->IsItCloseToDiggerMan(getX(), getY(), 4))
-	//{
-	//	int M = (16 + (getWorld()->getLevel() * 2));//this whole if block need to be finished using algorithm we come up with for running away
-	//	return;
-	//}
-	else if (getWorld()->isProtestorInHorizontalLineOfSight(getX()) || getWorld()->isProtestorInVerticalLineOfSight(getY()))
-	{
-		if (!getWorld()->IsItCloseToDiggerMan(getX(), getY(), 4))
-			if (getWorld()->canProtestorReachDiggerMan(getX(), getY()))
-			{
-				setDirection(getWorld()->setDirectionOfProtetorForChase(getX(), getY()));
-				if (getDirection() == left)
-				{
-					moveLeft();
-					numSquares = 0;
-					return;
-				}
-				else if (getDirection() == right)
-				{
-					moveRight();
-					numSquares = 0;
-					return;
-				}
-				else if (getDirection() == down)
-				{
-					moveDown();
-					numSquares = 0;
-					return;
-				}
-				else if (getDirection() == up)
-				{
-					moveUp();
-					numSquares = 0;
-					return;
-				}
-			}
-	}
-	else
-	{
-		if (numSquares > 0)
-		{
-			if (getDirection() == left)
-			{
-				if (!moveLeft())
-					numSquares = 0;
-				else
-					numSquares--;
-			}
-			else if (getDirection() == right)
-			{
-				if (!moveRight())
-					numSquares = 0;
-				else
-					numSquares--;
-			}
-			else if (getDirection() == down)
-			{
-				if (!moveDown())
-					numSquares = 0;
-				else
-					numSquares--;
-			}
-			else if (getDirection() == up)
-			{
-				if (!moveUp())
-					numSquares = 0;
-				else
-					numSquares--;
-			}
-		}
-		else
-		{
-			setDirection(getWorld()->setDirectionOfProtetorForRegularWalking(getX(), getY()));
-			setNumSquaresToMoveInCurrentDirection();
-			if (getWorld()->protestorIsAtIntersection(getX(), getY(), getDirection()))
-			{
-				if (nonRestingTicks % 200 == 0)
-				{
-					setDirection(getWorld()->setDirectionAtIntersection(getX(), getY(), getDirection()));
-					setNumSquaresToMoveInCurrentDirection();
-				}
-			}
-			if (getDirection() == left)
-			{
-				if (!moveLeft())
-					numSquares = 0;
-				else
-					numSquares--;
-			}
-			else if (getDirection() == right)
-			{
-				if (!moveRight())
-					numSquares = 0;
-				else
-					numSquares--;
-			}
-			else if (getDirection() == down)
-			{
-				if (!moveDown())
-					numSquares = 0;
-				else
-					numSquares--;
-			}
-			else if (getDirection() == up)
-			{
-				if (!moveUp())
-					numSquares = 0;
-				else
-					numSquares--;
-			}
-		}
-	}
-}
-bool HardcoreProtester::moveLeft()
-{
-	if (getWorld()->canActMoveTo(this, getX() - 1, getY()))
-	{
-		moveTo(getX() - 1, getY());
-		return true;
-	}
-	return false;
-}
-bool HardcoreProtester::moveRight()
-{
-	if (getWorld()->canActMoveTo(this, getX() + 1, getY()))
-	{
-		moveTo(getX() + 1, getY());
-		return true;
-	}
-	return false;
-}
-bool HardcoreProtester::moveUp()
-{
-	if (getWorld()->canActMoveTo(this, getX(), getY() + 1))
-	{
-		moveTo(getX(), getY() + 1);
-		return true;
-	}
-	return false;
-}
-bool HardcoreProtester::moveDown()
-{
-	if (getWorld()->canActMoveTo(this, getX(), getY() - 1))
-	{
-		moveTo(getX(), getY() - 1);
-		return true;
-	}
-	return false;
-}
+
+
+
 /*****************************************************
 *       DIRT CLASS                                   *
 * -This class makes up the "background" for the game *

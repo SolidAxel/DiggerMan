@@ -59,7 +59,7 @@ int StudentWorld::init()
 	dm = new DiggerMan(this, O);
 
 	//Create regular protester in the very first tick of the game;
-	pr = new Protester(this);
+	pr = new RegularProtester(this);
 	addActorToGame(pr);
 
 
@@ -142,7 +142,7 @@ int StudentWorld::move()
 			else
 			{
 				//add regular protestor to field:
-				pr = new Protester(this);
+				pr = new RegularProtester(this);
 				addActorToGame(pr);
 			}
 			m_numberoftickssincelastprotester = 0;//reset the tick count for protestors
