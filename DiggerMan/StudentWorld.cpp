@@ -316,7 +316,6 @@ bool StudentWorld::AreObjectsClose(int x, int y, int radius){
 	while (it != m_v.end())
 	{
 		/*if ((*it)->getID() == IMID_GOLD){
-
 		double distance = EuclidanDistance((*it)->getX(), (*it)->getY(),dm->getX(),dm->getY());
 		if (distance<=radius)
 		m_ObjectsClose = true;
