@@ -1088,5 +1088,3 @@ void WaterPool::doSomething()
 			ticksinTempState--;//decrement the ticks
 	}
 }
-
-
