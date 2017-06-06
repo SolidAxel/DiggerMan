@@ -265,15 +265,6 @@ Protester::~Protester()
 {
 	setVisible(false);
 }
-
-void Protester::isAnnoyed()
-{
-
-}
-void Protester::doSomething()
-{
-
-}
 bool Protester::isItInRestState()
 {
 	if (ticksToWaitBetweenMoves > 0)
@@ -365,7 +356,7 @@ bool Protester::moveDown()
 /****************************************************
 *       REGULAR-PROTESTER CLASS                    *
 ****************************************************/
-RegularProtester::RegularProtester(StudentWorld* world) : Protester(world,IMID_PROTESTER,5)
+RegularProtester::RegularProtester(StudentWorld* world) : Protester(world,IMID_PROTESTER,5), leaveOilField(false), hasYelled(false), waitToYell(0)
 {
 	setVisible(true);
 	setTicksToWaitBewtweenMoves();
@@ -386,7 +377,7 @@ void RegularProtester::doSomething()
 	else if (isItInRestState())
 	{
 		//cerr << "From inside IsItINrestate if protester do somenthing();" << endl;
-		ticksToWaitBetweenMoves--;
+		decTicksBetweenMoves();
 		if (hasYelled && waitToYell != 0)
 			waitToYell--;
 		return;
@@ -401,7 +392,7 @@ void RegularProtester::doSomething()
 		}
 		else
 		{
-			moveInThisDirection( getWorld()->nextDirectionToTake(this, leaveOilField));
+			moveInThisDirection(getWorld()->nextDirectionToTake(this, leaveOilField));
 			return;
 		}
 	}
@@ -490,7 +481,7 @@ void RegularProtester::doSomething()
 			setNumSquaresToMoveInCurrentDirection();
 			if (getWorld()->protestorIsAtIntersection(getX(), getY(), getDirection()))
 			{
-				if (nonRestingTicks % 200 == 0)
+				if (getNonRestingTicks() % 200 == 0)
 				{
 					setDirection(getWorld()->setDirectionAtIntersection(getX(), getY(), getDirection()));
 					setNumSquaresToMoveInCurrentDirection();
@@ -533,7 +524,7 @@ void RegularProtester::isAnnoyed()
 	{
 		leaveOilField = true;
 		getWorld()->playSound(SOUND_PROTESTER_GIVE_UP);
-		ticksToWaitBetweenMoves = 0;
+        setTicksBetweenMoves(0);
 		//cerr << "FROM PROTESTER IS ANNOYED AND GIVING UP:" << endl;
 		doSomething();
 	}
@@ -542,7 +533,7 @@ void RegularProtester::isAnnoyed()
 		getWorld()->playSound(SOUND_PROTESTER_ANNOYED);
 		decHealth();
 		decHealth();
-		ticksToWaitBetweenMoves += static_cast<int>(fmax(50, 100 - getWorld()->getLevel() * 10));
+        setTicksBetweenMoves(getNonRestingTicks() +static_cast<int>(fmax(50, 100 - getWorld()->getLevel() * 10)));
 	}
 }
 void RegularProtester::setleaveOilField(bool m)
@@ -557,7 +548,7 @@ bool RegularProtester::getLeaveOilField()const
 /****************************************************
 *       HARDCORE-PROTESTER CLASS                   *
 ****************************************************/
-HardcoreProtester::HardcoreProtester(StudentWorld* world) : Protester(world, IMID_HARD_CORE_PROTESTER, 20)
+HardcoreProtester::HardcoreProtester(StudentWorld* world) : Protester(world, IMID_HARD_CORE_PROTESTER, 20), leaveOilField(false), hasYelled(false), waitToYell(0)
 {
 	setVisible(true);
 	setTicksToWaitBewtweenMoves();
@@ -572,8 +563,8 @@ void HardcoreProtester::isAnnoyed()
 	{
 		leaveOilField = true;
 		getWorld()->playSound(SOUND_PROTESTER_GIVE_UP);
-		ticksToWaitBetweenMoves = 0;
-		//cerr << "FROM PROTESTER IS ANNOYED AND GIVING UP:" << endl;
+        setTicksBetweenMoves(0);
+        //cerr << "FROM PROTESTER IS ANNOYED AND GIVING UP:" << endl;
 		doSomething();
 	}
 	else
@@ -581,7 +572,7 @@ void HardcoreProtester::isAnnoyed()
 		getWorld()->playSound(SOUND_PROTESTER_ANNOYED);
 		decHealth();
 		decHealth();
-		ticksToWaitBetweenMoves += static_cast<int>(fmax(50, 100 - getWorld()->getLevel() * 10));
+        setTicksBetweenMoves(getTicksBetweenMoves() + static_cast<int>(fmax(50, 100 - getWorld()->getLevel() * 10)));
 	}
 }
 void HardcoreProtester::doSomething()
@@ -596,8 +587,8 @@ void HardcoreProtester::doSomething()
 	else if (isItInRestState())
 	{
 		//cerr << "From inside IsItINrestate if protester do somenthing();" << endl;
-		ticksToWaitBetweenMoves--;
-		if (hasYelled && waitToYell != 0)
+        decTicksBetweenMoves();
+        if (hasYelled && waitToYell != 0)
 			waitToYell--;
 		return;
 	}
@@ -731,7 +722,7 @@ void HardcoreProtester::doSomething()
 			setNumSquaresToMoveInCurrentDirection();
 			if (getWorld()->protestorIsAtIntersection(getX(), getY(), getDirection()))
 			{
-				if (nonRestingTicks % 200 == 0)
+				if (getNonRestingTicks() % 200 == 0)
 				{
 					setDirection(getWorld()->setDirectionAtIntersection(getX(), getY(), getDirection()));
 					setNumSquaresToMoveInCurrentDirection();

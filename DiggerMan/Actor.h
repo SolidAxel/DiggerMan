@@ -101,25 +101,41 @@ public:
 
 class Protester :public Character
 {
-	public:
-		Protester(StudentWorld * world, const int img, int life);
-		~Protester();
-		bool moveLeft();
-		bool moveRight();
-		bool moveUp();
-		bool moveDown();
-		bool isItInRestState();
-		virtual void doSomething();
-		void isAnnoyed();
-		void setTicksToWaitBewtweenMoves();
-		void moveInThisDirection(Direction dir);
-        virtual void setNumSquaresToMoveInCurrentDirection()
-        {
-            numSquares = rand() % 60 + 8;
-        }
-		int ticksToWaitBetweenMoves;
-		int nonRestingTicks = 0;
-        int numSquares;
+public:
+    Protester(StudentWorld * world, const int img, int life);
+    ~Protester();
+    bool moveLeft();
+    bool moveRight();
+    bool moveUp();
+    bool moveDown();
+    bool isItInRestState();
+    virtual void doSomething(){};
+    void isAnnoyed(){};
+    void setTicksToWaitBewtweenMoves();
+    void moveInThisDirection(Direction dir);
+    virtual void setNumSquaresToMoveInCurrentDirection()
+    {
+        numSquares = rand() % 60 + 8;
+    }
+    int getTicksBetweenMoves(){
+        return ticksToWaitBetweenMoves;
+    }
+    int getNonRestingTicks(){
+        return nonRestingTicks;
+    }
+    int getNumSquares(){
+        return numSquares;
+    }
+    void decTicksBetweenMoves(){
+        ticksToWaitBetweenMoves--;
+    }
+    void setTicksBetweenMoves(int x){
+        ticksToWaitBetweenMoves = x;
+    }
+private:
+    int ticksToWaitBetweenMoves;
+    int nonRestingTicks = 0;
+    int numSquares;
 
 };
 /////////////////////// CLASS REGULAR-PROTESTER//////////////////
@@ -128,16 +144,18 @@ public:
 	RegularProtester(StudentWorld* world);
 	virtual void doSomething();
 	virtual void isAnnoyed();
-
-    void setNumSquaresToMoveInCurrentDirection();
-	virtual ~RegularProtester();
+    virtual void setNumSquaresToMoveInCurrentDirection(){
+        numSquares = rand() % 60 + 8;
+    }
+    virtual ~RegularProtester();
 	bool getLeaveOilField()const;
 	void setleaveOilField(bool);
+    
 private:
-	int numSquares = 0;
-	int waitToYell = 0;
-	bool leaveOilField = false;
-	bool hasYelled = false;
+    int numSquares;
+    int waitToYell;
+	bool leaveOilField;
+	bool hasYelled;
 };
 ///////////////////CLASS HARCORE PORTESTER/////////////////////////
 class HardcoreProtester : public Protester {
@@ -146,14 +164,17 @@ public:
     virtual void doSomething();
     virtual void isAnnoyed();
 	bool findDiggerMan();
-    void setNumSquaresToMoveInCurrentDirection();
-	virtual ~HardcoreProtester();
+    virtual void setNumSquaresToMoveInCurrentDirection(){
+        numSquares = rand() % 60 + 8;
+    }
+    virtual ~HardcoreProtester();
 	bool getLeaveOilField()const;
+    
 private:
-	int numSquares = 0;
-	int waitToYell = 0;
-	bool leaveOilField = false;
-	bool hasYelled = false;
+    int numSquares;
+    int waitToYell;
+    bool leaveOilField;
+    bool hasYelled;
 	int M;
 };
 ////////////////////////////// CLASS ITEMS (INHERITS FROM BASE CLASS (ACTORS) AND IS THE BASE FOR ALL NON-MOVING CHARACTERS IN GAME, i.e DIRT, BOULDER/////////////////////////

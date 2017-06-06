@@ -19,7 +19,7 @@ const int BLOCKED = 4096;//Big number (4096) that represents a blocked path
 struct Coordinates
 {
 public:
-	Coordinates(int Xpos, int Ypos) :m_Xpos(Xpos), m_Ypos(Ypos){}
+	Coordinates(int Xpos, int Ypos) : m_Xpos(Xpos), m_Ypos(Ypos){}
 	int Xposition()const
 	{
 		return m_Xpos;
