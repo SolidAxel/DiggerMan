@@ -30,64 +30,92 @@ int StudentWorld::init()
 		for (int row = 0; row < 64; row++)//y is for the rows of dirt
 		{
 			//form the mineshaft
-			if (column >= 30 && column < 34 && row >= 4 && row < 60){
+			if (column >= 30 && column < 34 && row >= 4 && row < 60)
+			{
 				m_dirt[column][row] = nullptr;
+				mapmaze[column][row] = UNDISCOVERED;
+				mapTofindDiggerMan[column][row] = UNDISCOVERED;
 				continue;
 			}
-			if (row >= 60){
+			if (row >59)
+			{
 				m_dirt[column][row] = nullptr;
+				mapmaze[column][row] = UNDISCOVERED;
+				mapTofindDiggerMan[column][row] = UNDISCOVERED;
 				continue;
 			}
 			m_dirt[column][row] = new Dirt(this, column, row);
+			mapmaze[column][row] = BLOCKED;
+			mapTofindDiggerMan[column][row] = BLOCKED;
 		}
 	}
-
-	//Boulders
 	int xPosition = 0, yPosition = 0, radius = 6;
-	int B = static_cast<int>(fmin(getLevel() / 2 + 2, 7));
+	B = static_cast<int>(fmin(getLevel() / 2 + 2, 7));
 	cerr << "Number of Boulders this round = " << B << endl;
 	randPositions(B, IMID_BOULDER);
 	//Gold Nuggets
-	int G = static_cast<int> (fmax(5 - getLevel() / 2, 2));
+	G = static_cast<int> (fmax(5 - getLevel() / 2, 2));
 	cerr << "Number of GoldNuggets this round = " << G << endl;
 	randPositions(G, IMID_GOLD);
-	int O = static_cast<int>(fmin(2 + getLevel(), 18));
+	O = static_cast<int>(fmin(2 + getLevel(), 18));
 	cerr << "Number of Oil Barrels this round = " << O << endl;
 	randPositions(O, IMID_BARREL);
-
 	//create a  player:
-	dm = new DiggerMan(this, O);
-
+	if (firsttick)
+	{
+		dm = new DiggerMan(this, O);
+		m_numberoftickssincelastprotester = 0;
+	}
 	//Create regular protester in the very first tick of the game;
 	pr = new RegularProtester(this);
 	addActorToGame(pr);
 
-
+	//for (int i = 0; i < 64; i++)
+	//{
+	//	for (int j = 0; j < 64; j++)
+	//		mapmaze[i][j] = UNDISCOVERED;  // garbage values for hasnt' been looked
+	//}
+	//update the maps:
+	//updateMaps(mapmaze, 60, 60);
+	//updateMaps(mapTofindDiggerMan, dm->getX(), dm->getY());
+	//for (int x = 0; x < 65; x++)
+	//	for (int y = 0; y < 65; y++)
+	//		if ((x >= 30 && x< 34 && y >= 4 && y< 60) || (x>0 &&y>=60))
+	//		{
+	//			if (mapmaze[x][y]==UNDISCOVERED)
+	//				cout << "maze[" << x << "][" << y << "] is available" << endl;
+	//			else
+	//				cout << "maze[" << x << "][" << y << "] is not available" << endl;
+	//		}
 	return GWSTATUS_CONTINUE_GAME;
 
 }
-int StudentWorld::move()
-{
+int StudentWorld::move(){
 	// This code is here merely to allow the game to build, run, and terminate after you hit enter a few times.
 	// Notice that the return value GWSTATUS_PLAYER_DIED will cause our framework to end the current level.
-
+	m_numberoftickssincelastprotester++;//increase the number of ticks
 	if (OilBarrelsLeft() > 0)
 	{
 		DisplayText();
-		//NEW:
-		m_numberoftickssincelastprotester++;//increase the number of ticks
 		if (dm->isAlive())
+		{
 			dm->doSomething();
+			updateMaze();
+			updateDiggerManFinder();
+		}
 		else
 		{
 			decLives();
+			firsttick = true;
 			return GWSTATUS_PLAYER_DIED;
 		}
 		//traverse the vector so that all the Actors in it, Do Somenthing! ----------NEW
 		for (vector<Actor*>::iterator it = m_v.begin(); it != m_v.end(); it++)
 		{
 			if ((*it)->isAlive())
-				(*it)->doSomething();
+			{
+					(*it)->doSomething();
+			}
 		}
 
 		//Adding Goodies to game (water pool and/or sonar charge)
@@ -105,6 +133,8 @@ int StudentWorld::move()
 				yPosition = rand() % 61;
 				if (!isThereBoulder(xPosition, yPosition))//if no boulder found at x,y position, water can be added
 				{
+					xPosition = rand() % 61;
+					yPosition = rand() % 61;
 					while (isThereDirtGrid(xPosition, yPosition))//checks if there exist dirt at x,y positions
 					{
 						xPosition = rand() % 61;
@@ -122,17 +152,17 @@ int StudentWorld::move()
 
 		//if number of protesters is less than P, number of protestors on the field
 		//and if T ticks have passed since last protestor was added to field then protestors could be added to field.
-				//The following lines were for test purpose only:
-				//cerr << "# m_protestorcount < P : " << m_protestorscount << " < " << P <<endl;//test purpose only
-				//if (m_numberoftickssincelastprotester >= T)//Test purpose only
-				//	cerr << "# m_numberoftickssincelastprotester > T : " << m_numberoftickssincelastprotester << " > " << T << endl;//test purpose only
-				//
+		//The following lines were for test purpose only:
+		//cerr << "# m_protestorcount < P : " << numberOfProtestorsinField() << " < " << P << endl;//test purpose only
+		//if (m_numberoftickssincelastprotester >= T)//Test purpose only
+			//cerr << "# m_numberoftickssincelastprotester > T : " << m_numberoftickssincelastprotester << " > " << T << endl;//test purpose only
+		//
 		int m_protestorscount = numberOfProtestorsinField();//number of protestors currently in the field
-		if (m_protestorscount<P && m_numberoftickssincelastprotester>T)
+		if (m_protestorscount<P && m_numberoftickssincelastprotester>=T)
 		{
 			int probabilityOfHardcore = static_cast<int>(fmin(90, getLevel() * 10 + 30));//probability of hardcore protestor from appearing on the field.
 			int number = rand() % 100;//test purpose only
-			cerr << "number: " << number << " probability: " << probabilityOfHardcore;//test purpose only
+			//cerr << "number: " << number << " probability: " << probabilityOfHardcore;//test purpose only
 			if (number < probabilityOfHardcore)
 			{
 				//add new harcore protester to field:
@@ -166,13 +196,13 @@ int StudentWorld::move()
 	}
 	else
 		playSound(SOUND_FINISHED_LEVEL);
+	//firsttick = true;
 	return GWSTATUS_FINISHED_LEVEL;
 }
 
 //function to cleanup all memory allocated for the game.
 void StudentWorld::cleanUp()
 {
-	//deallocates memory for the oil field
 	for (int r = 0; r < 64; r++)
 	{
 		for (int c = 0; c < 64; c++)
@@ -198,8 +228,6 @@ void StudentWorld::addActorToGame(Actor *Act)
 {
 	m_v.push_back(Act);
 }
-
-//This function gives a random position in the oil field to  the Boulder, GoldNugget, and Oil Barrel
 void StudentWorld::randPositions(int numLvl, int ID)
 {
 	int x = 0, y = 0, radius = 6;
@@ -230,8 +258,8 @@ void StudentWorld::randPositions(int numLvl, int ID)
 
 
 		////check that there's no other items within a radius of 6
-		if (AreObjectsClose(x, y, radius) && m_ObjectsClose == true){
-
+		if (AreObjectsClose(x, y, radius) && m_ObjectsClose == true)
+		{
 			x = rand() % 60;
 			y = rand() % 56;
 			if (ID == IMID_BOULDER)
@@ -240,7 +268,8 @@ void StudentWorld::randPositions(int numLvl, int ID)
 				{
 					x = rand() % 60;
 					y = rand() % 56;
-					if (AreObjectsClose(x, y, radius)){
+					if (AreObjectsClose(x, y, radius))
+					{
 						x = rand() % 60;
 						y = rand() % 56;
 					}
@@ -258,6 +287,12 @@ void StudentWorld::randPositions(int numLvl, int ID)
 		{
 			addActorToGame(new Boulders(this, x, y));
 			removeDirt(x, y);
+			mapmaze[x][y] = BLOCKED;
+			mapTofindDiggerMan[x][y] = BLOCKED;
+			if (!firsttick){
+				updateMaze();
+				updateDiggerManFinder();
+			}
 		}
 		//if ID is gold then increase gold count
 		else if (ID == IMID_GOLD)
@@ -275,7 +310,6 @@ void StudentWorld::randPositions(int numLvl, int ID)
 		//removeDirt(x, y);
 	}
 }
-
 void StudentWorld::Sonar(bool state, int x, int y, int radius)//new
 {
 	vector<Actor*>::iterator it = m_v.begin();
@@ -288,11 +322,6 @@ void StudentWorld::Sonar(bool state, int x, int y, int radius)//new
 	}
 
 }
-
-
-
-//checks if object is close to diggerman position
-//Can't use AreObjectsClose because diggerman is not in the vector of actors
 bool StudentWorld::IsItCloseToDiggerMan(int x, int y, int radius){
 
 	double distance = EuclidanDistance(x, y, dm->getX(), dm->getY());
@@ -303,8 +332,15 @@ bool StudentWorld::IsItCloseToDiggerMan(int x, int y, int radius){
 }
 bool StudentWorld::IsItCloseToProtester(int x, int y, int radius){
 
-	double distance = EuclidanDistance(x, y, pr->getX(), pr->getY());
+	double distance = (EuclidanDistance(x, y, pr->getX(), pr->getY()));
 	if (distance <= radius)
+		return true;
+	else
+		return false;
+}
+bool StudentWorld::IsItCloseToHardcoreProtester(int x, int y, int radius)
+{
+	if ((EuclidanDistance(x, y, hr->getX(), hr->getY()) <= radius))
 		return true;
 	else
 		return false;
@@ -357,6 +393,7 @@ void StudentWorld::annoyAllNearbyActs(Actor* Act, int x, int y, int radius)
 				(*it)->hitByBoulder();
 				//count++;
 				it = m_v.erase(it);
+				it--;
 			}
 		}
 	}
@@ -369,15 +406,17 @@ void StudentWorld::annoyAllNearbyActs(Actor* Act, int x, int y, int radius)
 			
 			if ((*it)->getID() == IMID_PROTESTER || (*it)->getID() == IMID_HARD_CORE_PROTESTER)
 			{
-			   
+				
 					if ((*it)->isAlive())
 					{
 						(*it)->isAnnoyed();
 						it++;
 					}
 					else
-					
-						it = m_v.erase(it);	
+
+						it = m_v.erase(it);
+
+				
 			}
 			else
 				it++;
@@ -385,7 +424,6 @@ void StudentWorld::annoyAllNearbyActs(Actor* Act, int x, int y, int radius)
 	}
 	//return count;
 }
-//This Function removes dirt
 void StudentWorld::removeDirt(int x, int y)
 {
 	for (int c = x; c< x + 4; c++)
@@ -396,12 +434,17 @@ void StudentWorld::removeDirt(int x, int y)
 			{
 				playSound(SOUND_DIG);
 				delete m_dirt[c][r];
-				m_dirt[c][r] = nullptr;
+				m_dirt[c][r] = nullptr;	
+				mapmaze[c][r] = UNDISCOVERED;
+				mapTofindDiggerMan[c][r] = UNDISCOVERED;
+				if (!firsttick){
+					updateMaze();
+					updateDiggerManFinder();
+				}
 			}
 		}
 	}
 }
-//this function checks that the Actor can move in the x,y direction
 bool StudentWorld::canActMoveTo(Actor* Act, int x, int y)
 {
 	//out of bounds play
@@ -508,8 +551,7 @@ void StudentWorld::DisplayText()
 	int squirts = dm->getSquirts();
 	int gold = dm->getGoldPicked();
 	int sonar = dm->getSonarsCount();
-	int Oil = OilBarrelsLeft();
-	//int Oil = dm->getOilCount();
+	int Oil = dm->getOilCount();
 
 	stringstream os;
 	os << " Level: " << setw(2) << level;
@@ -525,14 +567,10 @@ void StudentWorld::DisplayText()
 	//os << "   Oil Left: "<<setw(2) << barrels;
 	setGameStatText(os.str());
 }
-
-//this function increments the player's score
 void StudentWorld::addScore(int score)
 {
 	increaseScore(score);
 }
-
-//this function adds items/goodies to DiggerMan's inventory
 void StudentWorld::addInvetory(int ID)
 {
 	if (ID == IMID_BARREL)
@@ -560,7 +598,6 @@ void StudentWorld::addInvetory(int ID)
 double StudentWorld::EuclidanDistance(int x1, int y1, int x2, int y2){
 	return sqrt(pow((x1 - x2), 2) + pow((y1 - y2), 2));
 }
-//this function is used to annoy DiggerMan
 void StudentWorld::annoyDiggerMan()
 {
 	dm->isAnnoyed();
@@ -579,9 +616,9 @@ bool StudentWorld::isProtestorFacingDiggerMan(int x, int y, int direction)
 	}
 	else if (y == dm->getY())//scenarios where its on same y-axis
 	{
-		if (x < dm->getY() && direction == 4)//if dm is to the right and protestor looking right
+		if (x < dm->getX() && direction == 4)//if dm is to the right and protestor looking right
 			return true;
-		else if (x > dm->getY() && direction == 3)//if dm is to the left and protestor looking left
+		else if (x > dm->getX() && direction == 3)//if dm is to the left and protestor looking left
 			return true;
 	}
 	else if (x > dm->getX() && y > dm->getY())//if protestor is upper right of dm
@@ -667,7 +704,7 @@ void StudentWorld::aProtestorActivatesNugget(int score)
 {
 	playSound(SOUND_PROTESTER_FOUND_GOLD);
 	addScore(score);
-	pr->leaveOilField = true;
+	pr->setleaveOilField(true);
 }
 
 void StudentWorld::aHardcoreProtestorActivatesNugget(int score)
@@ -785,8 +822,6 @@ GraphObject::Direction StudentWorld::setDirectionAtIntersection(int x, int y, in
 	}
 	return GraphObject::Direction(0);
 }
-
-//This function checks if dirt is present at the x,y positions
 bool StudentWorld::isThereDirt(int x, int y)
 {
 	if (m_dirt[x][y] != nullptr)
@@ -794,22 +829,248 @@ bool StudentWorld::isThereDirt(int x, int y)
 	return false;
 }
 
-//returns the number of protesters in the field//----------------------NEW
-int StudentWorld::numberOfProtestorsinField()//----------------------NEW
+int StudentWorld::numberOfProtestorsinField()//eturn number of protestors cuttently in field----------NEW
 {
 	int count = 0;
-	for (vector<Actor*>::iterator it = m_v.begin(); it != m_v.end(); it++)
-		if ((*it)->getID() == IMID_PROTESTER || (*it)->getID() == IMID_HARD_CORE_PROTESTER)
+	for (vector<Actor*>::iterator it = m_v.begin(); it != m_v.end();it++)
+	{
+		if ((*it)->getID() == IMID_HARD_CORE_PROTESTER || (*it)->getID() == IMID_PROTESTER)
 			count++;
+	}
 	return count;
 }
-
-//this function returns the current number of oil barrels in the field
-int StudentWorld::OilBarrelsLeft()
+int  StudentWorld::OilBarrelsLeft()//------------NEW
 {
 	int count = 0;
 	for (vector<Actor*>::iterator it = m_v.begin(); it != m_v.end(); it++)
+	{
 		if ((*it)->getID() == IMID_BARREL)
 			count++;
+	}
 	return count;
+
+}
+
+void StudentWorld::updateMaze()
+{
+
+	// Start by reseting each square in the heat maps that are not BLOCKED (by dirt or collision objects).
+	for (int x = 0; x < 64; x++)
+		for (int y = 0; y < 64; y++)
+			if (mapmaze[x][y] != BLOCKED)
+				mapmaze[x][y] = UNDISCOVERED;
+
+	
+	Coordinates current(0, 0);
+	queue<Coordinates> path;
+	if (!firsttick)
+	{
+		if (pr->getLeaveOilField())
+		{
+			Coordinates start(pr->getX(), pr->getY());
+			path.push(start);
+		}
+		else if (hr->getLeaveOilField())
+		{
+			Coordinates start(hr->getX(), hr->getY());
+			path.push(start);
+		}
+	}
+	else
+		Coordinates start(0, 0);
+	int distance = 0;
+	int y, x;
+
+	while (!path.empty())
+	{
+		distance++;
+		current = path.front();
+		path.pop();
+		x = current.Xposition();
+		y = current.Yposition();
+
+		// check down
+		if (y - 1 >= 0 && mapmaze[x][y - 1] == UNDISCOVERED)	
+		{
+			path.push(Coordinates(x,y - 1));
+			mapmaze[x][y - 1] = distance;
+		}
+		// check right
+		if (x + 1 < 64 && mapmaze[x + 1][y] == UNDISCOVERED)	
+		{
+			path.push(Coordinates( x + 1,y));
+			mapmaze[x + 1][y] = distance;
+		}
+		//check up
+		if (y + 1 < 64 && mapmaze[x][y + 1] == UNDISCOVERED)	
+		{
+			path.push(Coordinates(x,y + 1));
+			mapmaze[x][y + 1] = distance;
+		}
+		//check left
+		if (x - 1 >= 0 && mapmaze[x - 1][y] == UNDISCOVERED)	
+		{
+			path.push(Coordinates( x - 1,y));
+			mapmaze[x - 1][y] = distance;
+		}
+	}
+
+	return; // Should only reach here once every path has been explored.
+}
+
+void StudentWorld::updateDiggerManFinder()
+{
+	// Start by reseting each square in the heat maps that are not BLOCKED (by dirt or boulder objects).
+	for (int x = 0; x < 64; x++)
+	{
+		for (int y = 0; y < 64; y++)
+		{
+			if (mapTofindDiggerMan[x][y] != BLOCKED)
+				mapTofindDiggerMan[x][y] = UNDISCOVERED;
+		}
+	}
+
+
+	Coordinates current(0, 0);
+	queue<Coordinates> path;
+	Coordinates start(dm->getX(),dm->getY());
+	path.push(start);
+	int distance = 0;
+	int y, x;
+
+	while (!path.empty())
+	{
+		distance++;
+		current = path.front();
+		path.pop();
+		x = current.Xposition();
+		y = current.Yposition();
+
+		// check down
+		if (y - 1 >= 0 && mapTofindDiggerMan[x][y - 1] == UNDISCOVERED)
+		{
+			path.push(Coordinates(x, y - 1));
+			mapTofindDiggerMan[x][y - 1] = distance;
+		}
+		// check right
+		if (x + 1 < 64 && mapTofindDiggerMan[x + 1][y] == UNDISCOVERED)
+		{
+			path.push(Coordinates(x + 1, y));
+			mapTofindDiggerMan[x + 1][y] = distance;
+		}
+		//check up
+		if (y + 1 < 64 && mapTofindDiggerMan[x][y + 1] == UNDISCOVERED)
+		{
+			path.push(Coordinates(x, y + 1));
+			mapTofindDiggerMan[x][y + 1] = distance;
+		}
+		//check left
+		if (x - 1 >= 0 && mapTofindDiggerMan[x - 1][y] == UNDISCOVERED)
+		{
+			path.push(Coordinates(x - 1, y));
+			mapTofindDiggerMan[x - 1][y] = distance;
+		}
+	}
+
+	return; // Should only reach here once every path has been explored.	
+}
+GraphObject::Direction StudentWorld::nextDirectionToTake(Actor * protester, bool leavingOilField)
+{
+	int x = protester->getX();
+	int y = protester->getY();
+	int current = BLOCKED;
+	GraphObject::Direction currentDir = GraphObject::none;
+
+	if (leavingOilField) // Walk to exit
+	{
+		if (x >= 59 && y >= 59) return GraphObject::right;
+		if (mapmaze[x][y+1] < current && mapmaze[x][y+1] != UNDISCOVERED)
+		{
+			currentDir = GraphObject::up;
+			current = mapmaze[x][y+1];
+		}
+		if (mapmaze[x][y-1] < current && mapmaze[x][y-1] != UNDISCOVERED)
+		{
+			currentDir = GraphObject::down;
+			current = mapmaze[x][y-1];
+		}
+		if (mapmaze[x+1][y] < current && mapmaze[x+1][y] != UNDISCOVERED)
+		{
+			currentDir = GraphObject::right;
+			current = mapmaze[x+1][y];
+		}
+		if (mapmaze[x-1][y] < current && mapmaze[x-1][y] != UNDISCOVERED)
+		{
+			currentDir = GraphObject::left;
+			current = mapmaze[x-1][y];
+		}
+	}
+	if (!leavingOilField) // Walk to DiggerMan
+	{
+
+		if (mapTofindDiggerMan[x][y + 1] < current && mapTofindDiggerMan[x][y + 1] != UNDISCOVERED)
+		{
+			currentDir = GraphObject::up;
+			current = mapTofindDiggerMan[x][y + 1];
+		}
+		if (mapTofindDiggerMan[x][y - 1] < current && mapTofindDiggerMan[x][y - 1] != UNDISCOVERED)
+		{
+			currentDir = GraphObject::down;
+			current = mapTofindDiggerMan[x][y - 1];
+		}
+		if (mapTofindDiggerMan[x + 1][y] < current && mapTofindDiggerMan[x + 1][y] != UNDISCOVERED)
+		{
+			currentDir = GraphObject::right;
+			current = mapTofindDiggerMan[x + 1][y];
+		}
+		if (mapTofindDiggerMan[x - 1][y] < current && mapTofindDiggerMan[x - 1][y] != UNDISCOVERED)
+		{
+			currentDir = GraphObject::left;
+			current = mapTofindDiggerMan[x-1][y];
+		}
+	}
+	return currentDir;
+}
+
+bool StudentWorld::canMoveXYdir(int x, int y, Actor::Direction direction) 
+{
+	if (direction == GraphObject::up)
+	{
+		for (int i = x; i < x + 4; i++)
+			if (y + 4 >= 64 || isThereDirtGrid(i, y + 4))
+				return false;
+		if (isThereBoulder(x, y + 1)) 
+			return false;
+	}
+	if (direction == GraphObject::down)
+	{
+		for (int i = x; i < x + 4; i++)
+		{
+			if (y - 1 < 0 || isThereDirtGrid(i, y - 1))
+				return false;
+		}
+		if (isThereBoulder(x, y - 4)) //Needs to be 4, otherwise boulder will detect itself while falling.
+			return false;
+	}
+	if (direction == GraphObject::right)
+	{
+		for (int i = y; i < y + 4; i++)
+		{
+			if (x + 4 >= 64 || isThereDirtGrid(x + 4, i))
+				return false;
+		}
+		if (isThereBoulder(x + 1, y)) 
+			return false;
+	}
+	if (direction == GraphObject::left)
+	{
+		for (int i = y; i < y + 4; i++)
+		{
+			if (x - 1 < 0 || isThereDirtGrid(x - 1, i))
+				return false;
+		}
+		if (isThereBoulder(x - 1, y))
+			return false;
+	}
+	return true;
 }
