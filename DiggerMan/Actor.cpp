@@ -396,7 +396,7 @@ void RegularProtester::doSomething()
 			return;
 		}
 	}
-	else if (getWorld()->IsItCloseToDiggerMan(getX(), getY(), 4))//checks to see if protester is within the radius of diggerman by 4 units
+	else if (getWorld()->IsItCloseToDiggerMan(getX(), getY(), 16))//checks to see if protester is within the radius of diggerman by 4 units
 	{
 		if (getWorld()->isProtestorFacingDiggerMan(getX(), getY(), getDirection()))
 		{

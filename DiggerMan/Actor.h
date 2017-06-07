@@ -110,7 +110,7 @@ public:
     bool moveDown();
     bool isItInRestState();
     virtual void doSomething(){};
-    void isAnnoyed(){};
+    virtual void isAnnoyed(){};
     void setTicksToWaitBewtweenMoves();
     void moveInThisDirection(Direction dir);
     virtual void setNumSquaresToMoveInCurrentDirection()
